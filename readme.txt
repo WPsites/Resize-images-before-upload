@@ -19,7 +19,7 @@ Once this plugin is enabled you will see a new option on the media upload screen
 * No more massive images uploaded to your site for users to sit waiting to view/download
 * You can drag images right off your digital camera onto the WordPress uploader, getting them online in a flash.
 
-
+Find the plugin on github: https://github.com/WPsites/Resize-images-before-upload
 
 == Contributors ==
 
