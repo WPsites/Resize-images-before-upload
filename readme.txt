@@ -3,9 +3,9 @@ Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.1
+Stable tag: 0.2
 
-Resize your images before they are uploaded to your website (server), no need to use image editing software. You can drag+drop images straight from your digital camera right into WordPress.
+Resize your images before they are uploaded to your website (server), no need to use image editing software. Drag+drop images from your digital camera to WordPress.
 
 == Description ==
 
@@ -28,7 +28,7 @@ Simon Dunton - http://www.wpsites.co.uk
 
 == Installation ==
 
-1. Upload the WPide folder to the `/wp-content/plugins/` directory
+1. Upload the resize-images-before-upload folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently Asked Questions ==
@@ -39,6 +39,8 @@ Simon Dunton - http://www.wpsites.co.uk
 
 
 == Changelog ==
+= 0.2 =
+* Readme changes.
 
 = 0.1 =
 * Initial release.

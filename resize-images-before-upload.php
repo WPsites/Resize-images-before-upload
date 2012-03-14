@@ -3,7 +3,7 @@
 Plugin Name: Resize images before upload
 Plugin URI: http://www.wpsites.co.uk/
 Description: Resize your images before they are uploaded to the server, no need to use image editing software. You can drag+drop images straight from your digital camera right into WordPress
-Version: 1.0
+Version: 0.2
 Author: Simon Dunton
 Author URI: http://www.wpsites.co.uk
 License: GPL3
