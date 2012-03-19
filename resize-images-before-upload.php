@@ -31,8 +31,8 @@ class WP_Resize_Images_Before_Upload {
 
 	
 	function rbu_show_option(){		
-		echo "<p><input name='image_resize' id='image_resize' type='checkbox' value='HellYea'  /> " . __('Resize images before uploading them to the server.') . "<em>" . __('They will be resized to the large image size, as specified in your media settings') . "</em></p>";
-		echo "<script>jQuery(function($){    if (uploader.settings.resize) jQuery('#image_resize').click();  });</script>";
+		echo "<p><input name='image_resize' id='image_resize' type='checkbox' value='HellYea'  /> " . __('Resize images before uploading them to the server.') . "" . __('They will be resized to the large image size, as specified in your media settings') . "</p>";
+		echo "<script>jQuery(function($){  jQuery('#image_resize').click();  });</script>";
 	}
 
         function plupload_init($plupload_init_array){
