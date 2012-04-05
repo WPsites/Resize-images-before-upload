@@ -34,30 +34,43 @@ class WP_Resize_Images_Before_Upload {
 	function rbu_show_option(){
 		$quality =  $this->get_resize_quality() ;
 		echo "<p><input name='image_resize' id='image_resize' type='checkbox' value='HellYea'  /> " . __('Resize images before uploading them to the server.') . " " . __('Images will be resized to the large image dimensions, as specified in your media settings') . "</p>";
-		echo "<script>jQuery(function($){
+		echo "<script> jQuery(window).load(function($){
 		
 		jQuery('#image_resize').click();
 		jQuery('.max-upload-size').css('display', 'none');
+		
 		uploader.settings['resize'] = { width: resize_width, height: resize_height, quality: ${quality} };
+
 		
 			jQuery('#image_resize').click(function(event){
 				if (jQuery('#image_resize').is(':checked')){
 					jQuery('.max-upload-size').css('display', 'none');
-					uploader.settings['resize'] = { width: resize_width, height: resize_height, quality: ${quality} };
+					//uploader.settings['resize'] = { width: resize_width, height: resize_height, quality: ${quality} };
 				}else{
 					jQuery('.max-upload-size').css('display', 'inline');
 				}
 				return true;
 			});
 			
-			
+		//flash uploader seems to need an extra nudge with the resize settings
+		jQuery('div.plupload.flash').load(function($){
+			uploader.settings['resize'] = { width: resize_width, height: resize_height, quality: ${quality} };
+		});	
 			
 		
 		});</script>";
 	}
 
         function plupload_init($plupload_init_array){
+            //remove max file size
              unset($plupload_init_array['max_file_size']);
+             
+             //change runtime if needed for resize
+             //'runtimes' => 'html5,silverlight,flash,html4',
+	     if (! preg_match("#Firefox|Chrome#", $_SERVER['HTTP_USER_AGENT']) ){
+		 $plupload_init_array['runtimes'] = "flash";
+	     }
+            
             return $plupload_init_array;
         }
 	
