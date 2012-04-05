@@ -3,7 +3,7 @@
 Plugin Name: Resize images before upload
 Plugin URI: https://github.com/WPsites/Resize-images-before-upload
 Description: Resize your images before they are uploaded to the server, no need to use image editing software. You can drag+drop images straight from your digital camera right into WordPress
-Version: 0.4
+Version: 0.5
 Author: Simon @ WPsites
 Author URI: http://www.wpsites.co.uk
 License: GPL3
@@ -96,7 +96,7 @@ class WP_Resize_Images_Before_Upload {
 			'rbu_media_settings_section');
 		
 		add_settings_field('rbu_cancel_force_flash',
-			'Cancel force flash',
+			'Disable force flash',
 			array($this,'cancel_force_flash_callback_function'),
 			'media',
 			'rbu_media_settings_section');

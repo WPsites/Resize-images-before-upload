@@ -3,15 +3,15 @@ Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.4
+Stable tag: 0.5
 
 Automatically resizes your images right in your browser, before uploading.
 
 == Description ==
 
-Resize your images before they are uploaded to your website (server), no need to use image editing software. Drag+drop images from your digital camera to WordPress. Requires the Chrome or Firefox web browser.
+Resize your images before they are uploaded to your website (server), no need to use image editing software. Drag+drop images from your digital camera to WordPress. This plugin works best in Chrome or Firefox web browser.
 
-Plupload, the upload handler that is now utilised in WordPress has resize capabilities built in (as well as drag and drop). At this stage this functionality is not fully utilised in the WordPress core due to browser incompatibilities, ie. only works in limited browsers (Chrome & Firefox) 
+If you use the Firefox or Chrome web browser this plugin will work as expected. If you use a different web browser then then this plugin will swap your image uploader runtime to a Flash version which makes sure the resize function works across more web browsers. The side effect to this is drag+drop will be disabled since this is not supported in Flash. If you experience issues or drag+drop is more important to you than resizing images then you can disable the Flash override in your settings -> media.
 
 This plugin removes the upload file size limit and turns on the resize function.
 
@@ -47,6 +47,10 @@ Before writing this I uploaded a photo straight from a digital camera sized at 2
 
 
 == Changelog ==
+
+= 0.5 =
+* If the users browser is not Chrome or Firefox then we force the upload runtime to Flash which means images will be resized regardless of browser. The downside to this is drag+drop will no longer work. If drag+drop is more important to you than image resizing then you can disable this new functionality in your settings -> media.
+
 
 = 0.4 =
 * Added resize quality setting. You can modify the setting in the admin settings -> media
