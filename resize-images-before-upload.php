@@ -9,9 +9,12 @@ Author URI: http://www.wpsites.co.uk
 License: GPL3
 */
 
-/**
- * @author simon@wpsites.co.uk
- */
+if ( ! defined( 'RIBU_RESIZE_WIDTH' ) )
+       define( 'RIBU_RESIZE_WIDTH', 'resize_width' );
+ if ( ! defined( 'RIBU_RESIZE_HIGHT' ) )
+       define( 'RIBU_RESIZE_HEIGHT', 'resize_height' );
+       
+       
 class WP_Resize_Images_Before_Upload {
 		
 	/**
@@ -39,13 +42,13 @@ class WP_Resize_Images_Before_Upload {
 		jQuery('#image_resize').click();
 		jQuery('.max-upload-size').css('display', 'none');
 		
-		uploader.settings['resize'] = { width: resize_width, height: resize_height, quality: ${quality} };
+		uploader.settings['resize'] = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ${quality} };
 
 		
 			jQuery('#image_resize').click(function(event){
 				if (jQuery('#image_resize').is(':checked')){
 					jQuery('.max-upload-size').css('display', 'none');
-					//uploader.settings['resize'] = { width: resize_width, height: resize_height, quality: ${quality} };
+					//uploader.settings['resize'] = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ${quality} };
 				}else{
 					jQuery('.max-upload-size').css('display', 'inline');
 				}
@@ -54,7 +57,7 @@ class WP_Resize_Images_Before_Upload {
 			
 		//flash uploader seems to need an extra nudge with the resize settings
 		jQuery('div.plupload.flash').load(function($){
-			uploader.settings['resize'] = { width: resize_width, height: resize_height, quality: ${quality} };
+			uploader.settings['resize'] = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ${quality} };
 		});
 		
 			
