@@ -55,10 +55,28 @@ class WP_Resize_Images_Before_Upload {
 		//flash uploader seems to need an extra nudge with the resize settings
 		jQuery('div.plupload.flash').load(function($){
 			uploader.settings['resize'] = { width: resize_width, height: resize_height, quality: ${quality} };
-		});	
+		});
+		
 			
 		
 		});</script>";
+		
+		if ( $this->incompatible_browser() && !isset($_GET['you_toldmeabout_flash']) ){
+		
+		    ?>
+				<script>
+				    if(typeof navigator.plugins['Shockwave Flash']=='undefined'){
+					
+					alert('<?php echo __('The Adobe Flash plug-in is required for automatic image resizing in your browser.'); ?>');
+					
+					location.href = location.href + "&you_toldmeabout_flash=donttellmeagain";
+				    }
+				</script>
+		    <?php
+		
+		}
+		
+		
 	}
 
         function plupload_init($plupload_init_array){
@@ -68,9 +86,10 @@ class WP_Resize_Images_Before_Upload {
              //change runtime to flash for non firefox/chrome browsers, unless this action is cancelled by the rbu_cancel_force_flash setting
 	     if (!get_option('rbu_cancel_force_flash')){
 		
-		//'runtimes' => 'html5,silverlight,flash,html4',
-		if (! preg_match("#Firefox|Chrome#", $_SERVER['HTTP_USER_AGENT']) ){
-			$plupload_init_array['runtimes'] = "flash";
+		// if incompatible and we havent told them about flash being missing then lets use flash runtime -
+		// we can't be sure if they have flash though - and if they don't we'll load this again after telling them about no resize/flash, once told we will just roll without flash, no resize possible
+		if ( $this->incompatible_browser() && !isset($_GET['you_toldmeabout_flash']) ){
+			$plupload_init_array['runtimes'] = "flash"; // 'runtimes' => 'html5,silverlight,flash,html4',
 		}
 		
 	     }
@@ -123,6 +142,15 @@ class WP_Resize_Images_Before_Upload {
 		echo '<input name="rbu_cancel_force_flash" id="rbu_cancel_force_flash" type="checkbox" value="1" ' . checked( 1, get_option('rbu_cancel_force_flash'), false ) . ' class="small-text" /> <em class="description">Do not force the Flash uploader for non Chrome/Firefox browsers.</em>';
 	}
 	
+	function incompatible_browser(){
+	    
+		if (! preg_match("#Firefox|Chrome#", $_SERVER['HTTP_USER_AGENT']) ){
+			return true;
+		}
+		
+		return false;
+	}
+	
 	function resize_quality_validate_input($quality){
 		
 		$quality = absint( $quality ); //validate
@@ -173,9 +201,11 @@ class WP_Resize_Images_Before_Upload {
 }
 
 /**
- * Register the plugin
+ * Register the plugin - unless we have told them about a flash problem in which case this plugin is useless
  */
-add_action("init", create_function('', 'new WP_Resize_Images_Before_Upload();'));
+if ( !isset($_GET['you_toldmeabout_flash']) ){
+    add_action("init", create_function('', 'new WP_Resize_Images_Before_Upload();'));
+}
 
 // Ending PHP tag is not needed, it will only increase the risk of white space 
 // being sent to the browser before any HTTP headers.
