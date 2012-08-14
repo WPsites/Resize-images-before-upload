@@ -3,15 +3,15 @@ Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.5
+Stable tag: 0.6
 
 Automatically resizes your images right in your browser, before uploading.
 
 == Description ==
 
-Resize your images before they are uploaded to your website (server), no need to use image editing software. Drag+drop images from your digital camera to WordPress. This plugin works best in Chrome or Firefox web browser.
+Resize your images before they are uploaded to your website (server), no need to use image editing software. Drag+drop images from your digital camera to WordPress. This plugin works best in HTML5 compatible web browsers such as Chrome or Firefox.
 
-If you use the Firefox or Chrome web browser this plugin will work as expected. If you use a different web browser then then this plugin will swap your image uploader runtime to a Flash version which makes sure the resize function works across more web browsers. The side effect to this is drag+drop will be disabled since this is not supported in Flash. If you experience issues or drag+drop is more important to you than resizing images then you can disable the Flash override in your settings -> media.
+If your web browser does not support HTML5 then this plugin will swap your image uploader runtime to the Adobe Flash version which makes sure the resize function works across more web browsers. The side effect to this is drag+drop will be disabled since this is not supported in Flash (everything works in HTML5 compatible browsers). If you experience issues or drag+drop is more important to you than resizing images then you can disable the Flash override in your settings -> media.
 
 This plugin removes the upload file size limit and turns on the resize function.
 
@@ -22,6 +22,13 @@ This plugin also adds an additional setting to your settings -> media page that 
 * Less bandwidth used for your host when uploading your images
 * No more massive images uploaded to your site for users to sit waiting to view/download
 * You can drag images right off your digital camera onto the WordPress uploader, getting them online in a flash.
+
+If you want to force the resized image width/height, overriding the media settings (making it so multisite users cannot change this value etc) you can do this in wp-config.php by setting two constants:
+
+define( 'RIBU_RESIZE_WIDTH', 1000 ); //1000 px wide
+define( 'RIBU_RESIZE_HEIGHT', 900 ); //900 px high
+
+
 
 Find the plugin on github: https://github.com/WPsites/Resize-images-before-upload
 
@@ -43,10 +50,17 @@ Before writing this I uploaded a photo straight from a digital camera sized at 2
 
 = Does this plugin work on all browsers? =
 
- I don't think so. This looks like part of the reason this function is left out of WordPress core. Might be a good idea for users to add any browser resizing issues to the support forum so we know where the issues are. It works on Chrome and Firefox, that I do know! http://www.plupload.com/ shows the uploader component features which has some further notes on browser compatibility.
+I don't think so. This looks like part of the reason this function is left out of WordPress core.
+
+If the web browser supports HTML5 images will be resized. For browsers without HTML5 the Adobe Flash uploader will be used. If the browser doesn't even have Flash then a message will be shown (see change log) and no automatic resizing will take place. http://www.plupload.com/ shows the uploader component features which has some further notes on browser compatibility.
 
 
 == Changelog ==
+
+= 0.6 =
+* Added the ability to override the resize width and height in the wp-config.php file.
+* If the user hasn't got a browser that supports HTML5 or Flash then the plugin now shows a warning message: "The Adobe Flash plug-in is required for automatic image resizing in your browser". At which point the uploader will act as normal and not try to resize images automatically.
+
 
 = 0.5 =
 * If the users browser is not Chrome or Firefox then we force the upload runtime to Flash which means images will be resized regardless of browser. The downside to this is drag+drop will no longer work. If drag+drop is more important to you than image resizing then you can disable this new functionality in your settings -> media.
