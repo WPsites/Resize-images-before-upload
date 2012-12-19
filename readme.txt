@@ -2,8 +2,8 @@
 Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 0.6
+Tested up to: 3.5
+Stable tag: 0.7
 
 Automatically resizes your images right in your browser, before uploading.
 
@@ -15,9 +15,9 @@ If your web browser does not support HTML5 then this plugin will swap your image
 
 This plugin removes the upload file size limit and turns on the resize function.
 
-Once this plugin is enabled your images will be resized in the browser before being uploaded to your website (server). You will see a new option on the media upload screen to turn on/off the resize functionality. 
+Once this plugin is enabled your images will be resized in the browser before being uploaded to your website (server). 
 
-This plugin also adds an additional setting to your settings -> media page that allows you to specify the image quality when being resized. The quality value can range from 1-100. The higher the quality the larger the file size. The default value is 80 which reduces the file size whilst still maintaining a decent quality image.
+This plugin adds an additional setting to your settings -> media page that allows you to specify the image quality when being resized. The quality value can range from 1-100. The higher the quality the larger the file size. The default value is 80 which reduces the file size whilst still maintaining a decent quality image.
 
 * Less bandwidth used for your host when uploading your images
 * No more massive images uploaded to your site for users to sit waiting to view/download
@@ -28,6 +28,8 @@ If you want to force the resized image width/height, overriding the media settin
 define( 'RIBU_RESIZE_WIDTH', 1000 ); //1000 px wide
 define( 'RIBU_RESIZE_HEIGHT', 900 ); //900 px high
 
+define( 'RIBU_RESIZE_QUALITY', 75 ); //0-100, 100 being high quality
+defined( 'RIBU_MAX_UPLOAD_SIZE' '2097152b' ) ); //size in bytes
 
 
 Find the plugin on github: https://github.com/WPsites/Resize-images-before-upload
@@ -56,6 +58,11 @@ If the web browser supports HTML5 images will be resized. For browsers without H
 
 
 == Changelog ==
+
+= 0.7 =
+* Added additional options that can be defined in wp-config.php for quality and max file size
+* Removed the option to disable the functionality provided by this plugin on the media upload page as it seemed impossible to integrate into the new media system
+* Fixed the problems with the new media upload system
 
 = 0.6 =
 * Added the ability to override the resize width and height in the wp-config.php file.
