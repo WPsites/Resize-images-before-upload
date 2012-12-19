@@ -96,7 +96,7 @@ class WP_Resize_Images_Before_Upload {
 					
 					alert('<?php echo __('The Adobe Flash plug-in is required for automatic image resizing in your browser.'); ?>');
 					
-					location.href = location.href + "&you_toldmeabout_flash=donttellmeagain";
+                    location.href = "<?php echo add_query_arg('you_toldmeabout_flash','donttellmeagain');?>";
 				    }
 				</script>
 		    <?php
