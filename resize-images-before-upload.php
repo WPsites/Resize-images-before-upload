@@ -8,61 +8,85 @@ Author: Simon @ WPsites
 Author URI: http://www.wpsites.co.uk
 License: GPL3
 */
-
-if ( ! defined( 'RIBU_RESIZE_WIDTH' ) )
-       define( 'RIBU_RESIZE_WIDTH', 'resize_width' );
- if ( ! defined( 'RIBU_RESIZE_HIGHT' ) )
-       define( 'RIBU_RESIZE_HEIGHT', 'resize_height' );
        
        
 class WP_Resize_Images_Before_Upload {
-		
+    	
 	/**
 	 * The constructor 
 	 * @return void
 	 */
 	function __construct() {
+        
+        if ( ! defined( 'RIBU_RESIZE_WIDTH' ) )
+            define( 'RIBU_RESIZE_WIDTH', get_option('large_size_w') );
+        if ( ! defined( 'RIBU_RESIZE_HIGHT' ) )
+            define( 'RIBU_RESIZE_HEIGHT', get_option('large_size_h') ); 
+        if ( ! defined( 'RIBU_RESIZE_QUALITY' ) )
+            define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
+        if ( ! defined( 'RIBU_MAX_UPLOAD_SIZE' ) )
+            define( 'RIBU_MAX_UPLOAD_SIZE', wp_max_upload_size() ); 
 
-            add_filter('plupload_init', array($this,'plupload_init'),10,1);
+        add_filter('plupload_init', array($this,'plupload_init'),10,20);
 	    
-	    add_action('post-upload-ui', array($this,'rbu_show_option'),10);
-	    
-	    
+	    add_action('post-upload-ui', array($this,'rbu_show_option'),10,1);
+
 	    add_action('admin_init', array($this,'admin_init_settings'));
+
+        // Add hook for admin <head></head>
+        add_action('admin_head', array($this, 'my_custom_js'));
 
 	}
 
-
+    function my_custom_js() {
+ 
+    }
 	
 	function rbu_show_option(){
 		$quality =  $this->get_resize_quality() ;
-		echo "<p><input name='image_resize' id='image_resize' type='checkbox' value='HellYea'  /> " . __('Resize images before uploading them to the server.') . " " . __('Images will be resized to the large image dimensions, as specified in your media settings') . "</p>";
-		echo "<script> jQuery(window).load(function($){
-		
-		jQuery('#image_resize').click();
-		jQuery('.max-upload-size').css('display', 'none');
-		
-		uploader.settings['resize'] = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ${quality} };
+		echo "<p> " . __('Resize images before uploading them to the server.') . " " . __('Images will be resized to the large image dimensions, as specified in your media settings') . "</p>";
+		echo "<script> 
+        
+        
+        try{ // try use the uploader
+            if (uploader =='undefined' );
 
+            jQuery(window).load(function($){
+                ribu_js();
+            });
+            
+        }catch(err){ // Fall back to the wp.Uploader (new media manager which has no page load),  
+            
+            wp.Uploader.defaults.max_file_size = '200097152b';
+            wp.Uploader.defaults.resize = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ".RIBU_RESIZE_QUALITY." };
 		
-			jQuery('#image_resize').click(function(event){
-				if (jQuery('#image_resize').is(':checked')){
-					jQuery('.max-upload-size').css('display', 'none');
-					//uploader.settings['resize'] = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ${quality} };
-				}else{
-					jQuery('.max-upload-size').css('display', 'inline');
-				}
-				return true;
-			});
+    		//flash uploader seems to need an extra nudge with the resize settings
+            jQuery(document).on('load', 'div.plupload.flash', function (e) { 
+    
+                wp.Uploader.defaults.max_file_size = '200097152b';
+                wp.Uploader.defaults.resize = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ".RIBU_RESIZE_QUALITY." };
+                    
+            });
+            
+        }
+      
+        function ribu_js(){
+    
+            uploader.settings.max_file_size = '200097152b';
+            uploader.settings['resize'] = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ".RIBU_RESIZE_QUALITY." };
+                
+            
+            jQuery('#image_resize').click();
+    		jQuery('.max-upload-size').css('display', 'none');
 			
-		//flash uploader seems to need an extra nudge with the resize settings
-		jQuery('div.plupload.flash').load(function($){
-			uploader.settings['resize'] = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ${quality} };
-		});
+    		//flash uploader seems to need an extra nudge with the resize settings
+    		jQuery('div.plupload.flash').load(function(){
+    
+                uploader.settings.max_file_size = '200097152b';
+                uploader.settings['resize'] = { width: ". RIBU_RESIZE_WIDTH .", height: ". RIBU_RESIZE_HEIGHT .", quality: ".RIBU_RESIZE_QUALITY." }; 
+            });
 		
-			
-		
-		});</script>";
+		}</script>";
 		
 		if ( $this->incompatible_browser() && !isset($_GET['you_toldmeabout_flash']) ){
 		
