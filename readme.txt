@@ -3,7 +3,7 @@ Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 0.7
+Stable tag: 0.8
 
 Automatically resizes your images right in your browser, before uploading.
 
@@ -58,6 +58,8 @@ If the web browser supports HTML5 images will be resized. For browsers without H
 
 
 == Changelog ==
+= 0.7 =
+* Implimented fix suggested by 'linuxplayground' for flash 404 error with query string http://wordpress.org/support/topic/suggested-small-fix?replies=2
 
 = 0.7 =
 * Added additional options that can be defined in wp-config.php for quality and max file size
