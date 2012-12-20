@@ -25,7 +25,7 @@ class WP_Resize_Images_Before_Upload {
         if ( ! defined( 'RIBU_RESIZE_QUALITY' ) )
             define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
         if ( ! defined( 'RIBU_MAX_UPLOAD_SIZE' ) )
-            define( 'RIBU_MAX_UPLOAD_SIZE', wp_max_upload_size() ); 
+            define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
 
         add_filter('plupload_init', array($this,'plupload_init'),10,20);
 	    
@@ -33,18 +33,23 @@ class WP_Resize_Images_Before_Upload {
 
 	    add_action('admin_init', array($this,'admin_init_settings'));
 
-        // Add hook for admin <head></head>
-        add_action('admin_head', array($this, 'my_custom_js'));
+     
 
 	}
 
-    function my_custom_js() {
+    function get_max_upload() {
+ 
+        if ( function_exists('wp_max_upload_size') ){
+            return wp_max_upload_size();
+        } else{
+            return ini_get('upload_max_filesize') . 'b';
+        }
  
     }
 	
 	function rbu_show_option(){
 		$quality =  $this->get_resize_quality() ;
-		echo "<p> " . __('Resize images before uploading them to the server.') . " " . __('Images will be resized to the large image dimensions, as specified in your media settings') . "</p>";
+		echo "<p> " . __('Images will be resized to the large image dimensions, as specified in your media settings') . "</p>";
 		echo "<script> 
         
         
