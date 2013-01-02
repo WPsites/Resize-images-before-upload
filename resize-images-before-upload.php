@@ -93,7 +93,7 @@ class WP_Resize_Images_Before_Upload {
 		
 		}</script>";
 		
-		if ( $this->incompatible_browser() && !isset($_GET['you_toldmeabout_flash']) ){
+		if ( $this->incompatible_browser() && !isset($_SESSION['you_toldmeabout_flash']) ){
 		
 		    ?>
 				<script>
@@ -112,15 +112,16 @@ class WP_Resize_Images_Before_Upload {
 	}
 
         function plupload_init($plupload_init_array){
+        
             //remove max file size
-             unset($plupload_init_array['max_file_size']);
+            unset($plupload_init_array['max_file_size']);
              
              //change runtime to flash for non firefox/chrome browsers, unless this action is cancelled by the rbu_cancel_force_flash setting
 	     if (!get_option('rbu_cancel_force_flash')){
 		
 		// if incompatible and we havent told them about flash being missing then lets use flash runtime -
 		// we can't be sure if they have flash though - and if they don't we'll load this again after telling them about no resize/flash, once told we will just roll without flash, no resize possible
-		if ( $this->incompatible_browser() && !isset($_GET['you_toldmeabout_flash']) ){
+		if ( $this->incompatible_browser() && !isset($_SESSION['you_toldmeabout_flash']) ){
 			$plupload_init_array['runtimes'] = "flash"; // 'runtimes' => 'html5,silverlight,flash,html4',
 		}
 		
@@ -132,8 +133,13 @@ class WP_Resize_Images_Before_Upload {
 	
 	// Register and define the settings
 	function admin_init_settings(){
+        
+        // store the flash warning seen variable as a session
+        if ( isset($_GET['you_toldmeabout_flash']) ){
+            $_SESSION['you_toldmeabout_flash'] = "donttellmeagain";
+        }
 		
-		//create settings section
+		// create settings section
 		add_settings_section('rbu_media_settings_section',
 				'Resize before upload',
 				array($this,'media_settings_section_callback_function'),
@@ -235,7 +241,7 @@ class WP_Resize_Images_Before_Upload {
 /**
  * Register the plugin - unless we have told them about a flash problem in which case this plugin is useless
  */
-if ( !isset($_GET['you_toldmeabout_flash']) ){
+if ( !isset($_SESSION['you_toldmeabout_flash']) ){
     add_action("init", create_function('', 'new WP_Resize_Images_Before_Upload();'));
 }
 
