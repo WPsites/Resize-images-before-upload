@@ -3,7 +3,7 @@ Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1
+Stable tag: 1.1
 
 Automatically resizes your images right in your browser, before uploading.
 
@@ -12,6 +12,8 @@ Automatically resizes your images right in your browser, before uploading.
 Resize your images before they are uploaded to your website (server), no need to use image editing software. Drag+drop images from your digital camera to WordPress. This plugin works best in HTML5 compatible web browsers such as Chrome or Firefox.
 
 If your web browser does not support HTML5 then this plugin will swap your image uploader runtime to the Adobe Flash version which makes sure the resize function works across more web browsers. The side effect to this is drag+drop will be disabled since this is not supported in Flash (everything works in HTML5 compatible browsers). If you experience issues or drag+drop is more important to you than resizing images then you can disable the Flash override in your settings -> media.
+
+This plugin does not work on the iPhone or iPad.
 
 This plugin removes the upload file size limit and turns on the resize function.
 
@@ -58,6 +60,10 @@ If the web browser supports HTML5 images will be resized. For browsers without H
 
 
 == Changelog ==
+= 1.1 =
+* Implemented new JS to check for Flash player that should work in IE
+* Added not regarding this plugin not working on iPhone or iPad
+
 = 1 =
 * Fixed issues with the new media upload system and enabling the flash runtime for otherwise incompatible web browsers
 * New clearer alert message for incompatable browsers that don't have Flash installed
