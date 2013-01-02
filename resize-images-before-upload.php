@@ -12,7 +12,7 @@ License: GPL3
 //we use sessions to keep a session record of the flash warning as not to annoy
 if ( !session_id() )
     session_start();
-       
+   
 class WP_Resize_Images_Before_Upload {
     	
 	/**
@@ -102,11 +102,19 @@ class WP_Resize_Images_Before_Upload {
 		
 		    ?>
 				<script>
-				    if(typeof navigator.plugins['Shockwave Flash']=='undefined'){
+                    var hasFlash = false;
+                    try {
+                      var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+                      if(fo) hasFlash = true;
+                    }catch(e){
+                      if(navigator.mimeTypes ["application/x-shockwave-flash"] != undefined) hasFlash = true;
+                    }
+
+				    if(!hasFlash){
 					
-					alert('<?php echo __('Automatic resizing of images is not possible with your web browser (the Adobe Flash plug-in is required for otherwise incompatible browsers). \n\nEither install Flash or use a more suitable web browser (Firefox 3.5+, Chrome) '); ?>');
-					
-                    location.href = "<?php echo add_query_arg('you_toldmeabout_flash','donttellmeagain');?>";
+    					alert('<?php echo __('Automatic resizing of images is not possible with your web browser (the Adobe Flash plug-in is required for otherwise incompatible browsers). \n\nEither install Flash or use a more suitable web browser (Firefox 3.5+, Chrome) '); ?>');
+    					location.href = "<?php echo add_query_arg('you_toldmeabout_flash','donttellmeagain');?>";
+                    
 				    }
 				</script>
 		    <?php
