@@ -8,7 +8,10 @@ Author: Simon @ WPsites
 Author URI: http://www.wpsites.co.uk
 License: GPL3
 */
-       
+
+//we use sessions to keep a session record of the flash warning as not to annoy
+if ( !session_id() )
+    session_start();
        
 class WP_Resize_Images_Before_Upload {
     	
@@ -101,7 +104,7 @@ class WP_Resize_Images_Before_Upload {
 				<script>
 				    if(typeof navigator.plugins['Shockwave Flash']=='undefined'){
 					
-					alert('<?php echo __('The Adobe Flash plug-in is required for automatic image resizing in your browser.'); ?>');
+					alert('<?php echo __('Automatic resizing of images is not possible with your web browser (the Adobe Flash plug-in is required for otherwise incompatible browsers). \n\nEither install Flash or use a more suitable web browser (Firefox 3.5+, Chrome) '); ?>');
 					
                     location.href = "<?php echo add_query_arg('you_toldmeabout_flash','donttellmeagain');?>";
 				    }
@@ -160,6 +163,8 @@ class WP_Resize_Images_Before_Upload {
         if ( isset($_GET['you_toldmeabout_flash']) ){
             $_SESSION['you_toldmeabout_flash'] = "donttellmeagain";
         }
+        
+       
 		
 		// create settings section
 		add_settings_section('rbu_media_settings_section',
@@ -265,9 +270,6 @@ class WP_Resize_Images_Before_Upload {
  */
 if ( !isset($_SESSION['you_toldmeabout_flash']) ){
     add_action("init", create_function('', 'new WP_Resize_Images_Before_Upload();'));
-}else{
-    
-    echo "Resize images before upload plugin disabled";
 }
 
 // Ending PHP tag is not needed, it will only increase the risk of white space 
