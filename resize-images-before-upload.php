@@ -28,6 +28,8 @@ class WP_Resize_Images_Before_Upload {
             define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
 
         add_filter('plupload_init', array($this,'plupload_init'),10,20);
+        add_filter('plupload_default_settings', array($this,'plupload_default_settings'),10,20);
+
 	    
 	    add_action('post-upload-ui', array($this,'rbu_show_option'),10,1);
 
@@ -111,25 +113,45 @@ class WP_Resize_Images_Before_Upload {
 		
 	}
 
-        function plupload_init($plupload_init_array){
+    function plupload_init($plupload_init_array){
         
-            //remove max file size
-            unset($plupload_init_array['max_file_size']);
-             
-             //change runtime to flash for non firefox/chrome browsers, unless this action is cancelled by the rbu_cancel_force_flash setting
+        //remove max file size
+        unset($plupload_init_array['max_file_size']);
+        
+        
+         //change runtime to flash for non firefox/chrome browsers, unless this action is cancelled by the rbu_cancel_force_flash setting
 	     if (!get_option('rbu_cancel_force_flash')){
 		
-		// if incompatible and we havent told them about flash being missing then lets use flash runtime -
-		// we can't be sure if they have flash though - and if they don't we'll load this again after telling them about no resize/flash, once told we will just roll without flash, no resize possible
-		if ( $this->incompatible_browser() && !isset($_SESSION['you_toldmeabout_flash']) ){
-			$plupload_init_array['runtimes'] = "flash"; // 'runtimes' => 'html5,silverlight,flash,html4',
-		}
+    		// if incompatible and we havent told them about flash being missing then lets use flash runtime -
+    		// we can't be sure if they have flash though - and if they don't we'll load this again after telling them about no resize/flash, once told we will just roll without flash, no resize possible
+    		if ( $this->incompatible_browser() ){
+    			$plupload_init_array['runtimes'] = "flash"; // 'runtimes' => 'html5,silverlight,flash,html4',
+    		}
 		
 	     }
 
-            
             return $plupload_init_array;
-        }
+    }
+    
+    function plupload_default_settings($plupload_setting_array){
+        
+        //remove max file size by makinb it huge
+        $plupload_setting_array['max_file_size'] = "200097152b";
+        
+        
+         //change runtime to flash for non firefox/chrome browsers, unless this action is cancelled by the rbu_cancel_force_flash setting
+         if (!get_option('rbu_cancel_force_flash')){
+		
+    		// if incompatible and we havent told them about flash being missing then lets use flash runtime -
+    		// we can't be sure if they have flash though - and if they don't we'll load this again after telling them about no resize/flash, once told we will just roll without flash, no resize possible
+    		if ( $this->incompatible_browser() ){
+    			$plupload_setting_array['runtimes'] = "flash"; // 'runtimes' => 'html5,silverlight,flash,html4',
+    		}
+		
+	     }
+
+            return $plupload_setting_array;
+    }
 	
 	// Register and define the settings
 	function admin_init_settings(){
@@ -243,6 +265,9 @@ class WP_Resize_Images_Before_Upload {
  */
 if ( !isset($_SESSION['you_toldmeabout_flash']) ){
     add_action("init", create_function('', 'new WP_Resize_Images_Before_Upload();'));
+}else{
+    
+    echo "Resize images before upload plugin disabled";
 }
 
 // Ending PHP tag is not needed, it will only increase the risk of white space 
