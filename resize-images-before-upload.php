@@ -32,6 +32,7 @@ class WP_Resize_Images_Before_Upload {
 
         add_filter('plupload_init', array($this,'plupload_init'),10,20);
         add_filter('plupload_default_settings', array($this,'plupload_default_settings'),10,20);
+        add_filter('plupload_default_params', array($this,'plupload_default_settings'),10,20);
 
 	    
 	    add_action('post-upload-ui', array($this,'rbu_show_option'),10,1);
@@ -149,6 +150,8 @@ class WP_Resize_Images_Before_Upload {
         //remove max file size by makinb it huge
         $plupload_setting_array['max_file_size'] = "200097152b";
         
+        $plupload_setting_array['resize'] = array("width" => RIBU_RESIZE_WIDTH, "height" => RIBU_RESIZE_HEIGHT, "quality" => RIBU_RESIZE_QUALITY);
+        
         
          //change runtime to flash for non firefox/chrome browsers, unless this action is cancelled by the rbu_cancel_force_flash setting
          if (!get_option('rbu_cancel_force_flash')){
@@ -198,8 +201,7 @@ class WP_Resize_Images_Before_Upload {
 				 'rbu_resize_quality',
 				 array($this,'resize_quality_validate_input') );
 		register_setting('media',
-				 'rbu_cancel_force_flash',
-				 array($this,'cancel_force_flash_validate_input') );
+				 'rbu_cancel_force_flash');
 	
 	}
 	
@@ -238,22 +240,6 @@ class WP_Resize_Images_Before_Upload {
 				'error'                        // type of message
 			);
 			return 80;
-		}
-		
-	}
-	
-	function cancel_force_flash_validate_input($val){
-		
-		if ($val === "" || $val == 1){
-			return $val;
-		}else{
-			add_settings_error(
-				'cancel_force_flash',           // setting title
-				'cancel_force_flash_error',            // error ID
-				'Cancel force flash is either enabled or not',   // error message
-				'error'                        // type of message
-			);
-			return "";
 		}
 		
 	}
