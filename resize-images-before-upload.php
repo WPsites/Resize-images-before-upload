@@ -23,7 +23,7 @@ class WP_Resize_Images_Before_Upload {
         
         if ( ! defined( 'RIBU_RESIZE_WIDTH' ) )
             define( 'RIBU_RESIZE_WIDTH', get_option('large_size_w') );
-        if ( ! defined( 'RIBU_RESIZE_HIGHT' ) )
+        if ( ! defined( 'RIBU_RESIZE_HEIGHT' ) )
             define( 'RIBU_RESIZE_HEIGHT', get_option('large_size_h') ); 
         if ( ! defined( 'RIBU_RESIZE_QUALITY' ) )
             define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
