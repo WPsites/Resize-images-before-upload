@@ -3,7 +3,7 @@ Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.4
+Stable tag: 1.5
 
 Automatically resizes your images right in your browser, before uploading.
 
@@ -60,6 +60,9 @@ If the web browser supports HTML5 images will be resized. For browsers without H
 
 
 == Changelog ==
+
+= 1.5 =
+* Removed lots of messy JS, using some new hooks. Should work from a post or from the media section with both new and old uploaders. Hopefully no more problems!
 
 = 1.4 =
 * Fix some script block issues that effected IE and possibly other browsers

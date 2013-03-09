@@ -3,7 +3,7 @@
 Plugin Name: Resize images before upload
 Plugin URI: https://github.com/WPsites/Resize-images-before-upload
 Description: Resize your images before they are uploaded to the server, no need to use image editing software. You can drag+drop images straight from your digital camera right into WordPress
-Version: 1.4
+Version: 1.5
 Author: Simon @ WPsites
 Author URI: http://www.wpsites.co.uk
 License: GPL3
@@ -22,7 +22,7 @@ class WP_Resize_Images_Before_Upload {
     function __construct() {
     
     if ( ! defined( 'RIBU_RESIZE_WIDTH' ) )
-	define( 'RIBU_RESIZE_WIDTH', get_option('large_size_w') );
+    define( 'RIBU_RESIZE_WIDTH', get_option('large_size_w') );
     if ( ! defined( 'RIBU_RESIZE_HEIGHT' ) )
 	define( 'RIBU_RESIZE_HEIGHT', get_option('large_size_h') ); 
     if ( ! defined( 'RIBU_RESIZE_QUALITY' ) )
@@ -30,14 +30,16 @@ class WP_Resize_Images_Before_Upload {
     if ( ! defined( 'RIBU_MAX_UPLOAD_SIZE' ) )
 	define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
 
-    add_filter('plupload_init', array($this,'plupload_init'),10,20);
-    add_filter('plupload_default_settings', array($this,'plupload_default_settings'),10,20);
-    add_filter('plupload_default_params', array($this,'plupload_default_settings'),10,20);
+    add_filter('plupload_init', array($this,'plupload_init'),20);
+    add_filter('plupload_default_settings', array($this,'plupload_default_settings'),20);
+    add_filter('plupload_default_params', array($this,'plupload_default_settings'),20); 
 
 	
-	add_action('post-upload-ui', array($this,'rbu_show_option'),10,1);
+	add_action('post-upload-ui', array($this,'rbu_show_note'),10);
+    add_action('admin_footer',  array($this,'rbu_print_js'),10); //javascript output is only for the old uploader, new uploader uses plupload_default_settings/plupload_init
+    add_action('wp_footer',  array($this,'rbu_print_js'),10); // it's possible to have the media manager on the front end too
 
-	add_action('admin_init', array($this,'admin_init_settings'));
+	add_action('admin_init', array($this,'admin_init_settings'),20);
 
  
 
@@ -53,62 +55,38 @@ class WP_Resize_Images_Before_Upload {
  
     }
     
-    function rbu_show_option(){
-	$quality =  $this->get_resize_quality() ;
-	echo "<p> " . __('Images will be resized to the large image dimensions, as specified in your media settings') . "</p>";
+    function rbu_show_note(){
+    	echo "<p> " . __('Images will be resized to the large image dimensions, as specified in your media settings') . "</p>";
+    }
     
+    
+    function rbu_print_js(){
+        $quality =  $this->get_resize_quality() ;
 	?>
-	<script type="text/html"> 
-	 /* <![CDATA[ */
-	
-	    try{ /*  try use the uploader */
-		if (uploader =='undefined' );
-    
-		jQuery(window).load(function($){
-		    ribu_js();
-		});
-		
-	    }catch(err){ /*  Fall back to the wp.Uploader (new media manager which has no page load) */
-		
-		wp.Uploader.defaults.max_file_size = '200097152b';
-		wp.Uploader.defaults.resize = { width: <?php echo RIBU_RESIZE_WIDTH; ?>, height: <?php echo RIBU_RESIZE_HEIGHT; ?>, quality: <?php echo RIBU_RESIZE_QUALITY; ?> };
-		    
-		    /*  flash uploader seems to need an extra nudge with the resize settings */
-		jQuery(document).on('load', 'div.plupload.flash', function (e) { 
-	
-		    wp.Uploader.defaults.max_file_size = '200097152b';
-		    wp.Uploader.defaults.resize = { width: <?php echo RIBU_RESIZE_WIDTH; ?>, height: <?php echo RIBU_RESIZE_HEIGHT; ?>, quality: <?php echo RIBU_RESIZE_QUALITY; ?>  };
-			
-		});
-		
-	    }
-	  
-	    function ribu_js(){
-	
-		uploader.settings.max_file_size = '200097152b';
-		uploader.settings['resize'] = { width: <?php echo RIBU_RESIZE_WIDTH; ?>, height: <?php echo RIBU_RESIZE_HEIGHT; ?>, quality: <?php echo RIBU_RESIZE_QUALITY; ?>  };
-		    
-		
-		jQuery('#image_resize').click();
-		    jQuery('.max-upload-size').css('display', 'none');
-			    
-		    /*  lash uploader seems to need an extra nudge with the resize settings */
-		    jQuery('div.plupload.flash').load(function(){
-	
-		    uploader.settings.max_file_size = '200097152b';
-		    uploader.settings['resize'] = { width: <?php echo RIBU_RESIZE_WIDTH; ?>, height: <?php echo RIBU_RESIZE_HEIGHT; ?>, quality: <?php echo RIBU_RESIZE_QUALITY; ?> }; 
-		});
-		    
-	    }
-	 /* ]]> */
-	</script>";
+	<script type="text/javascript"> 
+        
+        jQuery(window).load(function($){
+        
+                try{ 
+                	if (uploader =='undefined' );
+                    
+                		    uploader.settings.max_file_size = '200097152b';
+                            uploader.settings['resize'] = { width: <?php echo RIBU_RESIZE_WIDTH; ?>, height: <?php echo RIBU_RESIZE_HEIGHT; ?>, quality: <?php echo RIBU_RESIZE_QUALITY; ?>  };
+            		
+            	}catch(err){ }
+                    
+                    
+        	    
+        });
+
+	</script>
 	<?php 
 	    
 	if ( $this->incompatible_browser() && !isset($_SESSION['you_toldmeabout_flash']) ){
 	
 	    ?>
-			<script type="text/html">
-			 /* <![CDATA[ */
+			<script type="text/javascript">
+			    
 			    var hasFlash = false;
 			    try {
 			      var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
@@ -123,7 +101,7 @@ class WP_Resize_Images_Before_Upload {
 				location.href = "<?php echo add_query_arg('you_toldmeabout_flash','donttellmeagain');?>";
 	    
 			    }
-			 /* ]]> */
+		
 			</script>
 	    <?php
 	
