@@ -3,7 +3,7 @@
 Plugin Name: Resize images before upload
 Plugin URI: https://github.com/WPsites/Resize-images-before-upload
 Description: Resize your images before they are uploaded to the server, no need to use image editing software. You can drag+drop images straight from your digital camera right into WordPress
-Version: 1.5
+Version: 1.6
 Author: Simon @ WPsites
 Author URI: http://www.wpsites.co.uk
 License: GPL3
@@ -29,6 +29,11 @@ class WP_Resize_Images_Before_Upload {
 	define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
     if ( ! defined( 'RIBU_MAX_UPLOAD_SIZE' ) )
 	define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
+    
+    // store the flash warning seen variable as a session
+    if ( isset($_GET['you_toldmeabout_flash']) ){
+        $_SESSION['you_toldmeabout_flash'] = "donttellmeagain";
+    }
 
     add_filter('plupload_init', array($this,'plupload_init'),20);
     add_filter('plupload_default_settings', array($this,'plupload_default_settings'),20);
@@ -47,11 +52,11 @@ class WP_Resize_Images_Before_Upload {
 
     function get_max_upload() {
  
-	if ( function_exists('wp_max_upload_size') ){
-	    return wp_max_upload_size();
-	} else{
-	    return ini_get('upload_max_filesize') . 'b';
-	}
+    	if ( function_exists('wp_max_upload_size') ){
+    	    return wp_max_upload_size();
+    	} else{
+    	    return ini_get('upload_max_filesize') . 'b';
+    	}
  
     }
     
@@ -155,13 +160,6 @@ class WP_Resize_Images_Before_Upload {
 	// Register and define the settings
 	function admin_init_settings(){
         
-        // store the flash warning seen variable as a session
-        if ( isset($_GET['you_toldmeabout_flash']) ){
-            $_SESSION['you_toldmeabout_flash'] = "donttellmeagain";
-        }
-        
-       
-		
 		// create settings section
 		add_settings_section('rbu_media_settings_section',
 				'Resize before upload',
@@ -204,7 +202,7 @@ class WP_Resize_Images_Before_Upload {
 	
 	function incompatible_browser(){
 	    
-		if (! preg_match("#Firefox|Chrome#", $_SERVER['HTTP_USER_AGENT']) ){
+		if (! preg_match("#Firefox|Chrome|iPad|iPhone|Opera#", $_SERVER['HTTP_USER_AGENT']) ){
 			return true;
 		}
 		
