@@ -29,6 +29,9 @@ class WP_Resize_Images_Before_Upload {
 	define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
     if ( ! defined( 'RIBU_MAX_UPLOAD_SIZE' ) )
 	define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
+	if ( ! defined( 'RIBU_FRONTEND_JS' ) )
+	define( 'RIBU_FRONTEND_JS', false ); 
+	
     
     // store the flash warning seen variable as a session
     if ( isset($_GET['you_toldmeabout_flash']) ){
@@ -42,8 +45,9 @@ class WP_Resize_Images_Before_Upload {
 	
 	add_action('post-upload-ui', array($this,'rbu_show_note'),10);
     add_action('admin_footer',  array($this,'rbu_print_js'),10); //javascript output is only for the old uploader, new uploader uses plupload_default_settings/plupload_init
-    add_action('wp_footer',  array($this,'rbu_print_js'),10); // it's possible to have the media manager on the front end too
-
+    if ( RIBU_FRONTEND_JS == true ) {
+	    add_action('wp_footer',  array($this,'rbu_print_js'),10); // it's possible to have the media manager on the front end too, but you should ask for it :)
+    }
 	add_action('admin_init', array($this,'admin_init_settings'),20);
 
  
