@@ -3,7 +3,7 @@ Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.6
+Stable tag: 1.7
 
 Automatically resizes your images right in your browser, before uploading.
 
@@ -60,6 +60,9 @@ If the web browser supports HTML5 images will be resized. For browsers without H
 
 
 == Changelog ==
+= 1.7 =
+* Make frontend adding of JS code available as an option using RIBU_FRONTEND_JS = true|false rather than default. Thanks to https://github.com/createdwithlove.
+
 = 1.6 =
 * Tweaked the list of supported browsers adding Opera and then also adding ipad/iphone just to stop the warning coming up even if people aren't uploading images on those platforms
 
