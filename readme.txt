@@ -3,7 +3,7 @@ Contributors: WPsites
 Tags: plupload, images, resize
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 1.7.1
+Stable tag: 1.8
 
 Automatically resizes your images right in your browser, before uploading.
 
@@ -19,7 +19,7 @@ This plugin removes the upload file size limit and turns on the resize function.
 
 Once this plugin is enabled your images will be resized in the browser before being uploaded to your website (server). 
 
-This plugin adds an additional setting to your settings -> media page that allows you to specify the image quality when being resized. The quality value can range from 1-100. The higher the quality the larger the file size. The default value is 80 which reduces the file size whilst still maintaining a decent quality image.
+This plugin adds an additional setting to your settings -> media page that allows you to specify the image quality when being resized. The quality value can range from 1-100. The higher the quality the larger the file size. The default value is 80 which reduces the file size whilst still maintaining a decent quality image. You can also set the resize dimensions for this plugin here to, if you weren't happy inheriting the default large image size settings.
 
 * Less bandwidth used for your host when uploading your images
 * No more massive images uploaded to your site for users to sit waiting to view/download
@@ -63,6 +63,9 @@ If the web browser supports HTML5 images will be resized. For browsers without H
 
 
 == Changelog ==
+= 1.8 =
+* Added height/width option to settings->media
+
 = 1.7.1 =
 * Updated to confirm works with 3.6
 
