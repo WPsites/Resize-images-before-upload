@@ -22,15 +22,15 @@ class WP_Resize_Images_Before_Upload {
     function __construct() {
     
         if ( ! defined( 'RIBU_RESIZE_WIDTH' ) )
-        define( 'RIBU_RESIZE_WIDTH', get_option('large_size_w') );
+            define( 'RIBU_RESIZE_WIDTH', $this->get_resize_width() );
         if ( ! defined( 'RIBU_RESIZE_HEIGHT' ) )
-        define( 'RIBU_RESIZE_HEIGHT', get_option('large_size_h') ); 
+            define( 'RIBU_RESIZE_HEIGHT', $this->get_resize_height()  ); 
         if ( ! defined( 'RIBU_RESIZE_QUALITY' ) )
-    	define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
+    	    define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
         if ( ! defined( 'RIBU_MAX_UPLOAD_SIZE' ) )
-    	define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
+    	    define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
     	if ( ! defined( 'RIBU_FRONTEND_JS' ) )
-    	define( 'RIBU_FRONTEND_JS', false ); 
+    	    define( 'RIBU_FRONTEND_JS', false ); 
     	
         
         // store the flash warning seen variable as a session
@@ -176,6 +176,20 @@ class WP_Resize_Images_Before_Upload {
 			array($this,'resize_quality_callback_function'),
 			'media',
 			'rbu_media_settings_section');
+            
+        // settings, put it in our new section
+		add_settings_field('rbu_resize_height',
+			'Resize height',
+			array($this,'resize_height_callback_function'),
+			'media',
+			'rbu_media_settings_section');
+        // settings, put it in our new section
+    	add_settings_field('rbu_resize_width',
+			'Resize width',
+			array($this,'resize_width_callback_function'),
+			'media',
+			'rbu_media_settings_section');
+         
 		
 		add_settings_field('rbu_cancel_force_flash',
 			'Disable force flash',
@@ -187,9 +201,12 @@ class WP_Resize_Images_Before_Upload {
 		register_setting('media',
 				 'rbu_resize_quality',
 				 array($this,'resize_quality_validate_input') );
+        register_setting('media',
+				 'rbu_resize_height' );
+        register_setting('media',
+				 'rbu_resize_width' );
 		register_setting('media',
 				 'rbu_cancel_force_flash');
-	
 	}
 	
 	function media_settings_section_callback_function(){
@@ -198,6 +215,14 @@ class WP_Resize_Images_Before_Upload {
 	
 	function resize_quality_callback_function(){
 		echo '<input name="rbu_resize_quality" id="rbu_resize_quality" type="text" value="'. $this->get_resize_quality() .'" class="small-text" /> <em class="description">1 - 100   (a low quality value will result in a considerably smaller file size and lower quality images - 80 is optimum)</em>';
+	}
+    
+    function resize_width_callback_function(){
+		echo '<input name="rbu_resize_width" id="rbu_resize_width" type="text" value="'. $this->get_resize_width() .'" class="small-text" /> <em class="description">you can override this by setting RIBU_RESIZE_WIDTH in your wp-config file</em>';
+	}
+    
+    function resize_height_callback_function(){
+		echo '<input name="rbu_resize_height" id="rbu_resize_height" type="text" value="'. $this->get_resize_height() .'" class="small-text" /> <em class="description">you can override this by setting RIBU_RESIZE_HEIGHT in your wp-config file</em>';
 	}
 	
 	function cancel_force_flash_callback_function(){
@@ -241,6 +266,32 @@ class WP_Resize_Images_Before_Upload {
 			return $quality;
 		}else{
 			return 80;
+		}
+	}
+    
+    function get_resize_width(){
+		
+		//get quality out of settings
+		$width = get_option('rbu_resize_width');
+
+		//return width or false 
+		if ($width){
+			return $width;
+		}else{
+			return get_option('large_size_w');
+		}
+	}
+    
+    function get_resize_height(){
+    	
+		//get quality out of settings
+		$height = get_option('rbu_resize_height');
+		
+		//return width or false 
+		if ($height){
+			return $height;
+		}else{
+			return get_option('large_size_h');
 		}
 	}
 
