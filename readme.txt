@@ -33,6 +33,9 @@ define( 'RIBU_RESIZE_HEIGHT', 900 ); //900 px high
 define( 'RIBU_RESIZE_QUALITY', 75 ); //0-100, 100 being high quality
 defined( 'RIBU_MAX_UPLOAD_SIZE' '2097152b' ) ); //size in bytes
 
+To work, any settings added to your wp-config.php file should be done above the line that reads:
+/* That's all, stop editing! Happy blogging. */
+
 
 Find the plugin on github: https://github.com/WPsites/Resize-images-before-upload
 
