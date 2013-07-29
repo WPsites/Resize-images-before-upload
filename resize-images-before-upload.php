@@ -21,36 +21,36 @@ class WP_Resize_Images_Before_Upload {
      */
     function __construct() {
     
-    if ( ! defined( 'RIBU_RESIZE_WIDTH' ) )
-    define( 'RIBU_RESIZE_WIDTH', get_option('large_size_w') );
-    if ( ! defined( 'RIBU_RESIZE_HEIGHT' ) )
-    define( 'RIBU_RESIZE_HEIGHT', get_option('large_size_h') ); 
-    if ( ! defined( 'RIBU_RESIZE_QUALITY' ) )
-	define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
-    if ( ! defined( 'RIBU_MAX_UPLOAD_SIZE' ) )
-	define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
-	if ( ! defined( 'RIBU_FRONTEND_JS' ) )
-	define( 'RIBU_FRONTEND_JS', false ); 
-	
+        if ( ! defined( 'RIBU_RESIZE_WIDTH' ) )
+        define( 'RIBU_RESIZE_WIDTH', get_option('large_size_w') );
+        if ( ! defined( 'RIBU_RESIZE_HEIGHT' ) )
+        define( 'RIBU_RESIZE_HEIGHT', get_option('large_size_h') ); 
+        if ( ! defined( 'RIBU_RESIZE_QUALITY' ) )
+    	define( 'RIBU_RESIZE_QUALITY', $this->get_resize_quality() ); 
+        if ( ! defined( 'RIBU_MAX_UPLOAD_SIZE' ) )
+    	define( 'RIBU_MAX_UPLOAD_SIZE', $this->get_max_upload() ); 
+    	if ( ! defined( 'RIBU_FRONTEND_JS' ) )
+    	define( 'RIBU_FRONTEND_JS', false ); 
+    	
+        
+        // store the flash warning seen variable as a session
+        if ( isset($_GET['you_toldmeabout_flash']) ){
+            $_SESSION['you_toldmeabout_flash'] = "donttellmeagain";
+        }
     
-    // store the flash warning seen variable as a session
-    if ( isset($_GET['you_toldmeabout_flash']) ){
-        $_SESSION['you_toldmeabout_flash'] = "donttellmeagain";
-    }
-
-    add_filter('plupload_init', array($this,'plupload_init'),20);
-    add_filter('plupload_default_settings', array($this,'plupload_default_settings'),20);
-    add_filter('plupload_default_params', array($this,'plupload_default_settings'),20); 
-
-	
-	add_action('post-upload-ui', array($this,'rbu_show_note'),10);
-    add_action('admin_footer',  array($this,'rbu_print_js'),10); //javascript output is only for the old uploader, new uploader uses plupload_default_settings/plupload_init
-    if ( RIBU_FRONTEND_JS == true ) {
-	    add_action('wp_footer',  array($this,'rbu_print_js'),10); // it's possible to have the media manager on the front end too, but you should ask for it :)
-    }
-	add_action('admin_init', array($this,'admin_init_settings'),20);
-
- 
+        add_filter('plupload_init', array($this,'plupload_init'),20);
+        add_filter('plupload_default_settings', array($this,'plupload_default_settings'),20);
+        add_filter('plupload_default_params', array($this,'plupload_default_settings'),20); 
+    
+    	
+    	add_action('post-upload-ui', array($this,'rbu_show_note'),10);
+        add_action('admin_footer',  array($this,'rbu_print_js'),10); //javascript output is only for the old uploader, new uploader uses plupload_default_settings/plupload_init
+        if ( RIBU_FRONTEND_JS == true ) {
+    	    add_action('wp_footer',  array($this,'rbu_print_js'),10); // it's possible to have the media manager on the front end too, but you should ask for it :)
+        }
+    	add_action('admin_init', array($this,'admin_init_settings'),20);
+    
+     
 
     }
 
