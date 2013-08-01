@@ -11,6 +11,8 @@ Automatically resizes your images right in your browser, before uploading.
 
 Resize your images before they are uploaded to your website (server), no need to use image editing software. Drag+drop images from your digital camera to WordPress. This plugin works best in HTML5 compatible web browsers such as Chrome or Firefox.
 
+If you're still unsure what this plugin does then check out this excellent video http://theaudacitytopodcast.com/5-wordpress-plugins-for-faster-blogging-and-podcasting-tap134/
+
 If your web browser does not support HTML5 then this plugin will swap your image uploader runtime to the Adobe Flash version which makes sure the resize function works across more web browsers. The side effect to this is drag+drop will be disabled since this is not supported in Flash (everything works in HTML5 compatible browsers). If you experience issues or drag+drop is more important to you than resizing images then you can disable the Flash override in your settings -> media.
 
 This plugin does not work on the iPhone or iPad.
