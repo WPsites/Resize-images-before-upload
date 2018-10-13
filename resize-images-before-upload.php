@@ -13,10 +13,7 @@ License: GPL3
 // and avoid initiating session on front-end website visitor.
 // but a simple cookie could be a better option to session
 if ( 
-        (
-            is_user_logged_in() ||
-            ( isset(RIBU_FRONTEND_JS) && RIBU_FRONTEND_JS == true )
-        ) &&
+        is_user_logged_in() &&
         !session_id()
     )
     session_start();
