@@ -9,8 +9,13 @@ Author URI: http://www.wpsites.co.uk
 License: GPL3
 */
 
-//we use sessions to keep a session record of the flash warning as not to annoy
-if ( !session_id() )
+// we use sessions to keep a session record of the flash warning as not to annoy
+// and avoid initiating session on front-end website visitor.
+// but a simple cookie could be a better option to session
+if ( 
+        is_user_logged_in() &&
+        !session_id()
+    )
     session_start();
    
 class WP_Resize_Images_Before_Upload {
